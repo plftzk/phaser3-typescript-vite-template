@@ -2,10 +2,11 @@ import Phaser from 'phaser'
 
 export default class ReaderScene extends Phaser.Scene {
     constructor() {
-        super('reader')
+        super('reader');
     }
 
     create() {
+        this.cameras.main.setBackgroundColor('#fff');
         const chars = 'あ猫阿狗。い言不合。う霾天气。え而不伤。お心汤血。\n' +
             'か车司机。き死回生。く笑不得。け天辟地。こ人心弦。\n' +
             'さ逼兮兮。し装革履。す心裂肺。せ翁失马。そ肠刮肚。\n' +
@@ -44,7 +45,7 @@ export default class ReaderScene extends Phaser.Scene {
                 continue;
             }
             const text = this.add.text(-1000, -1000, char, {
-                color: '#333',
+                color: '#ecc100',
                 fontSize: fontSize + 'px',
                 align: 'center'
             });
@@ -79,5 +80,38 @@ export default class ReaderScene extends Phaser.Scene {
                 unitCharIndex++;
             }
         }
+
+        // this.renderer.snapshot((img: any) => {
+        //     const link = document.createElement('a');
+        //     link.href = img.src;
+        //     link.download = 'screenshot.png';
+        //     link.click();
+        // });
+
+        this.rexUI.add.buttons({
+            x: 400,
+            y: 300,
+            orientation: 0,
+            buttons: [
+                this.createButton('下载图片'),
+            ],
+            space: {item: 8}
+        });
+
+    }
+
+    createButton(text: string) {
+        return this.rexUI.add.label({
+            width: 100,
+            height: 40,
+            background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 20, 0x7b5e57),
+            text: this.add.text(0, 0, text, {
+                fontSize: '18px'
+            }),
+            space: {
+                left: 10,
+                right: 10,
+            }
+        });
     }
 }
