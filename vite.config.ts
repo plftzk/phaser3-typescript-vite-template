@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import {resolve} from "path";
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
 	resolve: {
@@ -10,15 +11,7 @@ export default defineConfig({
 			},
 		],
 	},
-	plugins: [],
+	plugins: [vue()],
 	server: { host: '0.0.0.0', port: 8700 },
 	clearScreen: false,
-	//全局引入
-	css: {
-		preprocessorOptions: {
-			scss: {
-				additionalData: '@import "/@/style/common.scss";',
-			}
-		}
-	},
 })

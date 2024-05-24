@@ -1,12 +1,13 @@
+import '/@/style/global.scss';
 import Phaser from 'phaser'
 
-import ReaderScene from "./ReaderScene";
+import ReaderScene from './ReaderScene';
 
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
     parent: 'app',
-    width: 800,
-    height: 600,
+    width: window.innerWidth,
+    height: window.innerHeight,
     physics: {
         default: 'arcade'
     },
