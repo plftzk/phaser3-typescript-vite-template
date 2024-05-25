@@ -1,8 +1,22 @@
-import Phaser from 'phaser'
+import JsonComBuilder from "/@/lib/JsonComBuilder";
 
 export default class ReaderScene extends Phaser.Scene {
+    private earth: null | Phaser.GameObjects.Image;
+
     constructor() {
         super('reader');
+        this.earth = null;
+    }
+
+    preload() {
+        this.load.image('earth', 'assets/img/square-earth.png');
+    }
+
+    update(time: number) {
+        if (this.earth) {
+            this.earth.rotation += 0.005;
+            this.earth.y = this.earth.y + Math.sin(time / 1000 * 2);
+        }
     }
 
     create() {
@@ -88,30 +102,46 @@ export default class ReaderScene extends Phaser.Scene {
         //     link.click();
         // });
 
-        this.rexUI.add.buttons({
-            x: 400,
-            y: 300,
-            orientation: 0,
-            buttons: [
-                this.createButton('下载图片'),
-            ],
-            space: {item: 8}
-        });
 
+        this.earth = this.add.image(1000, 600, 'earth');
+
+
+        const com = new JsonComBuilder(this, 200, 200);
+
+        this.add.existing(com.build([{
+            type: 'rectangle',
+            x: 150,
+            y: 150,
+            w: 120,
+            h: 40
+        }]));
+        // this.rexUI.add.buttons({
+        //     x: 100,
+        //     y: 100,
+        //     width: 100,
+        //     orientation: 'x',
+        //     buttons: [
+        //         this.createButton('下载图片'),
+        //     ],
+        //     space: {item: 8}
+        // });
+        // const btn = this.add.rectangle(100, 100, 120, 40, 0xff00ff);
+        // this.rexButton.add(btn);
     }
 
     createButton(text: string) {
         return this.rexUI.add.label({
             width: 100,
             height: 40,
-            background: this.rexUI.add.roundRectangle(0, 0, 0, 0, 20, 0x7b5e57),
-            text: this.add.text(0, 0, text, {
+            background: this.rexUI.add.roundRectangle(300, 300, 100, 40, 20, 0x335e57),
+            text: this.add.text(300, 300, text, {
                 fontSize: '18px'
             }),
             space: {
-                left: 10,
+                left: 0,
                 right: 10,
-            }
+            },
+            align: 'center'
         });
     }
 }

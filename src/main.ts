@@ -1,6 +1,8 @@
-import '/@/style/global.scss';
+import '/@/css/global.scss';
 import Phaser from 'phaser';
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
+import RexButtonPlugin from 'phaser3-rex-plugins/plugins/button-plugin.js';
+
 
 declare module 'phaser' {
     interface Scene {
@@ -31,8 +33,17 @@ const config: Phaser.Types.Core.GameConfig = {
             key: 'rexUI',
             plugin: RexUIPlugin,
             mapping: 'rexUI'
-        }]
-    }
+        }, {
+            key: 'rexButton',
+            plugin: RexButtonPlugin,
+            mapping: 'rexButton',
+            start: true
+        }],
+    },
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    },
 }
 
 export default new Phaser.Game(config)
