@@ -102,18 +102,19 @@ export default class ReaderScene extends Phaser.Scene {
         //     link.click();
         // });
 
-
         this.earth = this.add.image(1000, 600, 'earth');
-
 
         const com = new JsonComBuilder(this, 200, 200);
 
         this.add.existing(com.build([{
-            type: 'rectangle',
-            x: 150,
-            y: 150,
-            w: 120,
-            h: 40
+            type: 'button',
+            conf: {
+                x: 150,
+                y: 150,
+                w: 120,
+                h: 20,
+                text: '截图'
+            }
         }]));
         // this.rexUI.add.buttons({
         //     x: 100,
