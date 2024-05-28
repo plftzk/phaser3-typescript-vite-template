@@ -1,5 +1,5 @@
 import Container = Phaser.GameObjects.Container;
-import {hexStr2Num} from "/@/util/color";
+import {toHexColor} from "/@/util/color";
 
 export default class JsonComBuilder {
     private readonly scene: Phaser.Scene;
@@ -11,21 +11,23 @@ export default class JsonComBuilder {
     }
 
     build(configs: ComStruct[]) {
-
-        configs.map((config) => {
+        configs.map((conf) => {
             let com;
-            switch (config.type) {
+            switch (conf.type) {
                 case 'rectangle':
-                    com = this.buildRectangle(config.conf);
+                    com = this.buildRectangle(conf.option);
                     break;
-                case 'roundRectangle':
-                    com = this.buildRoundRectangle(config.conf);
+                case 'roundRect':
+                    com = this.buildRoundRect(conf.option);
                     break;
                 case 'text':
-                    com = this.buildText(config.conf);
+                    com = this.buildText(conf.option);
+                    break;
+                case 'textBoard':
+                    this.buildTextBoard(conf.option);
                     break;
                 case 'button':
-                    this.buildButton(config.conf);
+                    this.buildButton(conf.option);
                     break;
             }
             if (com) {
@@ -36,22 +38,37 @@ export default class JsonComBuilder {
         return this.container;
     }
 
-    buildRectangle(conf: ComConf) {
-        return new Phaser.GameObjects.Rectangle(this.scene, 0, 0, conf.w, conf.h, 0x0f0fff);
+    fillComAttr(partComAttr: Partial<ComOptions>): ComOptions {
+        return Object.assign({
+            x: 0,
+            y: 0,
+            w: 0,
+            h: 0,
+            r: 0,
+            color: 0,
+            fillColor: 0,
+            text: ''
+        } as ComOptions, partComAttr);
     }
 
-    buildText(conf: ComConf) {
-        return new Phaser.GameObjects.Text(this.scene, 0, 0, conf.text || 'hello', {
+    buildRectangle(option: Partial<ComOptions>) {
+        return new Phaser.GameObjects.Rectangle(this.scene, 0, 0, option.w, option.h, 0x0f0fff);
+    }
+
+    buildText(option: Partial<ComOptions>) {
+        return new Phaser.GameObjects.Text(this.scene, 0, 0, option.text || 'hello', {
             color: '#00f',
             fontSize: '16px'
         }).setOrigin(0.5, 0.5);
     }
 
-    buildRoundRectangle(conf: ComConf) {
+    buildRoundRect(option: Partial<ComOptions>) {
         const g = new Phaser.GameObjects.Graphics(this.scene);
-        g.fillStyle(hexStr2Num('#333333'), 1);
-        g.lineStyle(1, 0x000000, 1);
-        g.fillRoundedRect(0, 0, conf.w || 60, conf.h || 20, 10);
+        const opt: ComOptions = this.fillComAttr(option);
+        if (option.fillColor) {
+            g.fillStyle(toHexColor(option.fillColor), 1);
+        }
+        g.fillRoundedRect(opt.x, opt.y, opt.w, opt.h, opt.r);
         return g;
     }
 
@@ -120,8 +137,8 @@ export default class JsonComBuilder {
         }
     }
 
-    buildButton(conf: ComConf) {
-        const textInfo = this.getCharSize(conf.text || '', {
+    buildTextBoard(option: Partial<ComOptions>) {
+        const textInfo = this.getCharSize(option.text || '', {
             fontSize: 15,
             color: '#333',
         }, {});
@@ -132,12 +149,12 @@ export default class JsonComBuilder {
             paddingTop,
             paddingLeft
         } = textInfo;
-        const roundRectangle = this.buildRoundRectangle({
+        const roundRect = this.buildRoundRect({
             w: boxWidth,
             h: boxHeight,
-            fillColor: conf.backgroundColor || ''
+            fillColor: option.fillColor
         });
-        this.container.add(roundRectangle);
+        this.container.add(roundRect);
         if (text) {
             // text.setOrigin(0.5, 0.5);
             // text.setAlign('center');
@@ -147,4 +164,11 @@ export default class JsonComBuilder {
 
         console.log(`[LOG] textInfo`, textInfo);
     }
+
+    buildButton(option: Partial<ComOptions>) {
+        const opt: ComOptions = this.fillComAttr(option);
+        const bg = new Phaser.GameObjects.Image(this.scene, opt.x, opt.y, opt.texture);
+        this.container.add(bg);
+    }
+
 }

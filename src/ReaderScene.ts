@@ -10,6 +10,7 @@ export default class ReaderScene extends Phaser.Scene {
 
     preload() {
         this.load.image('earth', 'assets/img/square-earth.png');
+        this.load.image('btnBg', 'assets/img/button-bg.png');
     }
 
     update(time: number) {
@@ -101,48 +102,19 @@ export default class ReaderScene extends Phaser.Scene {
         //     link.download = 'screenshot.png';
         //     link.click();
         // });
-
         this.earth = this.add.image(1000, 600, 'earth');
-
         const com = new JsonComBuilder(this, 200, 200);
-
         this.add.existing(com.build([{
             type: 'button',
-            conf: {
+            option: {
                 x: 150,
                 y: 150,
-                w: 120,
-                h: 20,
-                text: '截图'
+                w: 160,
+                h: 90,
+                texture: 'btnBg'
             }
         }]));
-        // this.rexUI.add.buttons({
-        //     x: 100,
-        //     y: 100,
-        //     width: 100,
-        //     orientation: 'x',
-        //     buttons: [
-        //         this.createButton('下载图片'),
-        //     ],
-        //     space: {item: 8}
-        // });
-        // const btn = this.add.rectangle(100, 100, 120, 40, 0xff00ff);
-        // this.rexButton.add(btn);
-    }
 
-    createButton(text: string) {
-        return this.rexUI.add.label({
-            width: 100,
-            height: 40,
-            background: this.rexUI.add.roundRectangle(300, 300, 100, 40, 20, 0x335e57),
-            text: this.add.text(300, 300, text, {
-                fontSize: '18px'
-            }),
-            space: {
-                left: 0,
-                right: 10,
-            },
-            align: 'center'
-        });
+
     }
 }

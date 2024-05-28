@@ -12,3 +12,10 @@ export function hexStr2Num(str: string): number {
     }
     return 0;
 }
+
+export function toHexColor(v: string | number): number {
+    if (typeof v === 'string') {
+        return hexStr2Num(v);
+    }
+    return v;
+}
