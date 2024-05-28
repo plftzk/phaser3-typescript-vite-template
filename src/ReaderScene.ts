@@ -22,6 +22,7 @@ export default class ReaderScene extends Phaser.Scene {
 
     create() {
         this.cameras.main.setBackgroundColor('#fff');
+
         const chars = 'あ猫阿狗。い言不合。う霾天气。え而不伤。お心汤血。\n' +
             'か车司机。き死回生。く笑不得。け天辟地。こ人心弦。\n' +
             'さ逼兮兮。し装革履。す心裂肺。せ翁失马。そ肠刮肚。\n' +
@@ -42,24 +43,25 @@ export default class ReaderScene extends Phaser.Scene {
         let unitCharIndex = 0;
         let largerCharSize = null;
         let charSize = null;
-        const xGap = 10;
+        const xGap = 5;
         const yGap = 10;
-        const lastCharPosition = {
+        const drawingCharPosition = {
             x: 10,
             y: 10,
         };
         for (const i in strList) {
             const char = strList[i];
-            let fontSize = 20;
+            let fontSize = 40;
             if (unitCharIndex === 0) {
-                fontSize = 40;
+                fontSize = 60;
             }
             if (char === '\n') {
                 rowIndex++;
-                lastCharPosition.x = xGap;
+                drawingCharPosition.x = xGap;
                 continue;
             }
             const text = this.add.text(-1000, -1000, char, {
+                fontFamily: '隶书',
                 color: '#ecc100',
                 fontSize: fontSize + 'px',
                 align: 'center'
@@ -76,19 +78,34 @@ export default class ReaderScene extends Phaser.Scene {
                 }
             }
             if (largerCharSize) {
-                lastCharPosition.y = yGap + rowIndex * largerCharSize.height * lineHeight;
+                drawingCharPosition.y = yGap + rowIndex * largerCharSize.height * lineHeight;
                 if (unitCharIndex > 0 && charSize) {
-                    lastCharPosition.y += largerCharSize.height - charSize.height - 5;
+                    drawingCharPosition.y += largerCharSize.height - charSize.height;
                 }
-                const x = lastCharPosition.x + textWidth + 3;
-                lastCharPosition.x = x;
-                const y = lastCharPosition.y;
-                text.setX(x - textWidth);
+                const x = drawingCharPosition.x + textWidth / 2;
+                drawingCharPosition.x = x + textWidth / 2 + 10;
+                const y = drawingCharPosition.y;
+                text.setX(x);
                 text.setY(y);
                 if (unitCharIndex === 0) {
                     text.setColor('#128f6b');
                 }
             }
+
+            const tb = text.getBounds();
+            const tw = tb.width;
+            const th = tb.height;
+
+            this.add.rectangle(
+                text.x + tw / 2, // 矩形的X坐标
+                text.y + th / 2, // 矩形的Y坐标
+                tw, // 矩形的宽度
+                th, // 矩形的高度
+                0x333333, // 矩形的填充颜色
+                0.1 // 矩形的透明度
+            );
+
+
             if (char === '。') {
                 unitCharIndex = 0;
             } else {
@@ -102,19 +119,19 @@ export default class ReaderScene extends Phaser.Scene {
         //     link.download = 'screenshot.png';
         //     link.click();
         // });
-        this.earth = this.add.image(1000, 600, 'earth');
+        this.earth = this.add.image(window.innerWidth - 200, 600, 'earth');
         const com = new JsonComBuilder(this, 200, 200);
+
+
         this.add.existing(com.build([{
             type: 'button',
             option: {
-                x: 150,
-                y: 150,
+                x: window.innerWidth - 450,
+                y: window.innerHeight - 300,
                 w: 160,
                 h: 90,
                 texture: 'btnBg'
             }
         }]));
-
-
     }
 }
