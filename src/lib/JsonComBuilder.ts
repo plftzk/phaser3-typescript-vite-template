@@ -1,4 +1,5 @@
 import Container = Phaser.GameObjects.Container;
+import Image = Phaser.GameObjects.Image;
 import {toHexColor} from "/@/util/color";
 
 export default class JsonComBuilder {
@@ -167,7 +168,7 @@ export default class JsonComBuilder {
 
     buildButton(option: Partial<ComOptions>) {
         const opt: ComOptions = this.fillComAttr(option);
-        const bg = new Phaser.GameObjects.Image(this.scene, opt.x, opt.y, opt.texture);
+        const bg = new Image(this.scene, opt.x, opt.y, opt.texture);
         this.container.add(bg);
     }
 
