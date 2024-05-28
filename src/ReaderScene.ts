@@ -102,7 +102,7 @@ export default class ReaderScene extends Phaser.Scene {
                 tw, // 矩形的宽度
                 th, // 矩形的高度
                 0x333333, // 矩形的填充颜色
-                0.1 // 矩形的透明度
+                0.03 // 矩形的透明度
             );
 
 
