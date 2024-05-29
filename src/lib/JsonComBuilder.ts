@@ -1,6 +1,8 @@
 import Container = Phaser.GameObjects.Container;
 import Image = Phaser.GameObjects.Image;
-import {toHexColor} from "/@/util/color";
+import Rectangle = Phaser.GameObjects.Rectangle;
+import Graphics = Phaser.GameObjects.Graphics;
+import {hex2Str, unitizeSize, toHexColor} from "/@/util/style";
 
 export default class JsonComBuilder {
     private readonly scene: Phaser.Scene;
@@ -32,7 +34,13 @@ export default class JsonComBuilder {
                     break;
             }
             if (com) {
-                this.container.add(com);
+                if (Array.isArray(com)) {
+                    com.map((item) => {
+                        this.container.add(item);
+                    });
+                } else {
+                    this.container.add(com);
+                }
             }
         })
 
@@ -48,28 +56,69 @@ export default class JsonComBuilder {
             r: 0,
             color: 0,
             fillColor: 0,
-            text: ''
+            fontSize: '16px',
+            text: '',
+            textDecorator: false
         } as ComOptions, partComAttr);
     }
 
     buildRectangle(option: Partial<ComOptions>) {
-        return new Phaser.GameObjects.Rectangle(this.scene, 0, 0, option.w, option.h, 0x0f0fff);
+        return new Rectangle(this.scene, 0, 0, option.w, option.h, 0x0f0fff);
+    }
+
+    buildDashLine() {
+        const graphics = new Graphics(this.scene);
+        graphics.lineStyle(1, 0xff0000);
+        const x1 = 10;
+        const x2 = 100;
+        const y1 = 10;
+        const y2 = 10;
+        const dashLength = 10;
+        const gapLength = 5;
+        const deltaX = x2 - x1;
+        const deltaY = y2 - y1;
+        const dashGapLength = dashLength + gapLength;
+        const dashCount = Math.floor(Math.sqrt(deltaX * deltaX + deltaY * deltaY) / dashGapLength);
+        const dashX = deltaX / dashCount;
+        const dashY = deltaY / dashCount;
+        for (let i = 0; i < dashCount; i++) {
+            const startX = x1 + i * dashX;
+            const startY = y1 + i * dashY;
+            const endX = startX + dashX * (dashLength / dashGapLength);
+            const endY = startY + dashY * (dashLength / dashGapLength);
+            graphics.lineBetween(startX, startY, endX, endY);
+        }
+        this.container.add(graphics);
+        this.scene.add.existing(graphics);
     }
 
     buildText(option: Partial<ComOptions>) {
-        return new Phaser.GameObjects.Text(this.scene, 0, 0, option.text || 'hello', {
-            color: '#00f',
-            fontSize: '16px'
+        const o: ComOptions = this.fillComAttr(option);
+        const text = new Phaser.GameObjects.Text(this.scene, o.x, o.y, o.text, {
+            color: hex2Str(o.color),
+            fontSize: unitizeSize(o.fontSize)
         }).setOrigin(0.5, 0.5);
+
+        const comList: any[] = [text];
+        if (o.textDecorator) {
+            const tb = text.getBounds();
+            const tw = tb.width;
+            const th = tb.height;
+
+            const bound = new Rectangle(this.scene, 0, 0, tw, th, 0x666666, 0.5);
+            bound.setStrokeStyle(1, 0x000000);
+            comList.push(bound);
+        }
+        return comList
     }
 
     buildRoundRect(option: Partial<ComOptions>) {
         const g = new Phaser.GameObjects.Graphics(this.scene);
-        const opt: ComOptions = this.fillComAttr(option);
+        const o: ComOptions = this.fillComAttr(option);
         if (option.fillColor) {
             g.fillStyle(toHexColor(option.fillColor), 1);
         }
-        g.fillRoundedRect(opt.x, opt.y, opt.w, opt.h, opt.r);
+        g.fillRoundedRect(o.x, o.y, o.w, o.h, o.r);
         return g;
     }
 

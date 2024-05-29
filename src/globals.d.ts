@@ -13,9 +13,27 @@ interface ComRadiusAttr extends ComBase {
 }
 
 type Color = string | number;
+type FontSize = string | number;
+
+type Border = {
+    topWidth: number
+    topColor: Color
+    rightWidth: number
+    rightColor: Color
+    bottomWidth: number
+    bottomColor: Color
+    leftWidth: number
+    leftColor: Color
+} | number;
+
+interface TextDecorator {
+    border: Border
+}
 
 interface ComOptions extends ComBase {
     text: string
+    fontSize: FontSize
+    textDecorator: TextDecorator | boolean
     color: Color
     fillColor: Color
     r: integer | ComRadiusAttr

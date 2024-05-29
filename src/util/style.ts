@@ -1,6 +1,6 @@
-export function hexStr2Num(str: string): number {
-    str = str.replace('#', '');
-    const strList = str.split('');
+export function hexStr2Num(s: string): number {
+    s = s.replace('#', '');
+    const strList = s.split('');
     if (strList.length === 3) {
         const arr: string[] = [];
         strList.map((v) => {
@@ -13,9 +13,23 @@ export function hexStr2Num(str: string): number {
     return 0;
 }
 
+export function hex2Str(v: string | number): string {
+    if (typeof v === 'number') {
+        return '#' + v.toString(16);
+    }
+    return v;
+}
+
 export function toHexColor(v: string | number): number {
     if (typeof v === 'string') {
         return hexStr2Num(v);
+    }
+    return v;
+}
+
+export function unitizeSize(v: string | number, unit = 'px'): string {
+    if (typeof v === 'number') {
+        return `${v}${unit}`;
     }
     return v;
 }
