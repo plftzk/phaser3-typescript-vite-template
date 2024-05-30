@@ -35,7 +35,11 @@ export default class ReaderScene extends Phaser.Scene {
                 textDecorator: true
             }
         }]));
-        jb.buildDashLine();
+        jb.buildHDashLine({
+            x: 100,
+            y: 100,
+            l: 100
+        });
 true
         // const chars = 'あ猫阿狗。い言不合。う霾天气。え而不伤。お心汤血。\n' +
         //     'か车司机。き死回生。く笑不得。け天辟地。こ人心弦。\n' +

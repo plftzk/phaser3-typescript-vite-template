@@ -66,15 +66,14 @@ export default class JsonComBuilder {
         return new Rectangle(this.scene, 0, 0, option.w, option.h, 0x0f0fff);
     }
 
-    buildDashLine() {
+    buildDashLine(option: DashLine) {
         const graphics = new Graphics(this.scene);
-        graphics.lineStyle(1, 0xff0000);
-        const x1 = 10;
-        const x2 = 100;
-        const y1 = 10;
-        const y2 = 10;
-        const dashLength = 10;
-        const gapLength = 5;
+        const color = option.color || 0x000000;
+        const lineWidth = option.lineWidth || 1;
+        graphics.lineStyle(lineWidth, toHexColor(color));
+        const {x1, x2, y1, y2} = option;
+        const dashLength = option.dashLength || 10;
+        const gapLength = option.gapLength || 10;
         const deltaX = x2 - x1;
         const deltaY = y2 - y1;
         const dashGapLength = dashLength + gapLength;
@@ -90,6 +89,26 @@ export default class JsonComBuilder {
         }
         this.container.add(graphics);
         this.scene.add.existing(graphics);
+    }
+
+    buildHDashLine(option: HVDashLine) {
+        this.buildDashLine({
+            x1: option.x,
+            x2: option.x + option.l,
+            y1: option.y,
+            y2: option.y,
+            ...option
+        })
+    }
+
+    buildVDashLine(option: HVDashLine) {
+        this.buildDashLine({
+            x1: option.x,
+            x2: option.x,
+            y1: option.y,
+            y2: option.y + option.l,
+            ...option
+        })
     }
 
     buildText(option: Partial<ComOptions>) {

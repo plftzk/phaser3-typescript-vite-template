@@ -26,6 +26,26 @@ type Border = {
     leftColor: Color
 } | number;
 
+interface DashLineBase {
+    dashLength?: integer
+    gapLength?: integer
+    color?: Color
+    lineWidth?: integer
+}
+
+interface DashLine extends DashLineBase {
+    x1: integer
+    x2: integer
+    y1: integer
+    y2: integer
+}
+
+interface HVDashLine extends DashLineBase {
+    x: integer
+    y: integer
+    l: integer
+}
+
 interface TextDecorator {
     border: Border
 }
