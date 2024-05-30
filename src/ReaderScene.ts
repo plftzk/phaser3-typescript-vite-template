@@ -23,7 +23,7 @@ export default class ReaderScene extends Phaser.Scene {
     create() {
         this.cameras.main.setBackgroundColor('#fff');
 
-        const jb = new JsonComBuilder(this, 100, 100);
+        const jb = new JsonComBuilder(this, 0, 0);
         this.add.existing(jb.build([{
             type: 'text',
             option: {
