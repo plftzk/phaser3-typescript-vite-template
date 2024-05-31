@@ -1,4 +1,4 @@
-export function hexStr2Num(s: string): number {
+export function hexString2Number(s: string): number {
     s = s.replace('#', '');
     const strList = s.split('');
     if (strList.length === 3) {
@@ -22,7 +22,7 @@ export function hex2Str(v: string | number): string {
 
 export function toHexColor(v: string | number): number {
     if (typeof v === 'string') {
-        return hexStr2Num(v);
+        return hexString2Number(v);
     }
     return v;
 }

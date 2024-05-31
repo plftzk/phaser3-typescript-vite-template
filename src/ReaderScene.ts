@@ -22,14 +22,13 @@ export default class ReaderScene extends Phaser.Scene {
 
     create() {
         this.cameras.main.setBackgroundColor('#fff');
-
         const jb = new JsonComBuilder(this, 0, 0);
         this.add.existing(jb.build([{
             type: 'text',
             option: {
                 x: 0,
                 y: 0,
-                text: '金',
+                text: '太阳',
                 color: '#f00',
                 fontSize: 60,
                 textDecorator: true
@@ -40,7 +39,6 @@ export default class ReaderScene extends Phaser.Scene {
             y: 100,
             l: 100
         });
-true
         // const chars = 'あ猫阿狗。い言不合。う霾天气。え而不伤。お心汤血。\n' +
         //     'か车司机。き死回生。く笑不得。け天辟地。こ人心弦。\n' +
         //     'さ逼兮兮。し装革履。す心裂肺。せ翁失马。そ肠刮肚。\n' +

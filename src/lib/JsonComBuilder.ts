@@ -18,7 +18,7 @@ export default class JsonComBuilder {
             let com;
             switch (conf.type) {
                 case 'rectangle':
-                    com = this.buildRectangle(conf.option);
+                    com = this.buildRectangle(<ComRectangle>conf.option);
                     break;
                 case 'roundRect':
                     com = this.buildRoundRect(conf.option);
@@ -27,7 +27,7 @@ export default class JsonComBuilder {
                     com = this.buildText(conf.option);
                     break;
                 case 'textBoard':
-                    this.buildTextBoard(conf.option);
+                    this.buildTextBoard(<ComTextBoard>conf.option);
                     break;
                 case 'button':
                     this.buildButton(conf.option);
@@ -54,16 +54,15 @@ export default class JsonComBuilder {
             w: 0,
             h: 0,
             r: 0,
-            color: 0,
-            fillColor: 0,
+            color: 0x000000,
             fontSize: '16px',
             text: '',
             textDecorator: false
         } as ComOptions, partComAttr);
     }
 
-    buildRectangle(option: Partial<ComOptions>) {
-        return new Rectangle(this.scene, 0, 0, option.w, option.h, 0x0f0fff);
+    buildRectangle(option: ComRectangle) {
+        return new Rectangle(this.scene, option.x, option.y, option.w, option.h, toHexColor(option.fillColor));
     }
 
     buildDashLine(option: DashLine) {
@@ -116,7 +115,7 @@ export default class JsonComBuilder {
         const text = new Phaser.GameObjects.Text(this.scene, o.x, o.y, o.text, {
             color: hex2Str(o.color),
             fontSize: unitizeSize(o.fontSize)
-        }).setOrigin(0.5, 0.5);
+        });
 
         const comList: any[] = [text];
         if (o.textDecorator) {
@@ -124,7 +123,7 @@ export default class JsonComBuilder {
             const tw = tb.width;
             const th = tb.height;
 
-            const bound = new Rectangle(this.scene, 0, 0, tw, th, 0x666666, 0.5);
+            const bound = new Rectangle(this.scene, tw / 2, th / 2, tw, th, 0x666666, 0.5);
             bound.setStrokeStyle(1, 0x000000);
             comList.push(bound);
         }
@@ -134,8 +133,8 @@ export default class JsonComBuilder {
     buildRoundRect(option: Partial<ComOptions>) {
         const g = new Phaser.GameObjects.Graphics(this.scene);
         const o: ComOptions = this.fillComAttr(option);
-        if (option.fillColor) {
-            g.fillStyle(toHexColor(option.fillColor), 1);
+        if (option.color) {
+            g.fillStyle(toHexColor(option.color), 1);
         }
         g.fillRoundedRect(o.x, o.y, o.w, o.h, o.r);
         return g;
@@ -206,7 +205,7 @@ export default class JsonComBuilder {
         }
     }
 
-    buildTextBoard(option: Partial<ComOptions>) {
+    buildTextBoard(option: ComTextBoard) {
         const textInfo = this.getCharSize(option.text || '', {
             fontSize: 15,
             color: '#333',
@@ -218,19 +217,19 @@ export default class JsonComBuilder {
             paddingTop,
             paddingLeft
         } = textInfo;
-        const roundRect = this.buildRoundRect({
+        console.log(`[LOG]`, boxWidth / 2);
+        const roundRect = this.buildRectangle({
+            x: boxWidth / 2,
+            y: 0,
             w: boxWidth,
             h: boxHeight,
             fillColor: option.fillColor
         });
         this.container.add(roundRect);
         if (text) {
-            // text.setOrigin(0.5, 0.5);
-            // text.setAlign('center');
             text.setPosition(paddingLeft, paddingTop);
             this.container.add(text);
         }
-
         console.log(`[LOG] textInfo`, textInfo);
     }
 

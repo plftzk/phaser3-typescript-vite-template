@@ -12,6 +12,7 @@ interface ComRadiusAttr extends ComBase {
     br: integer
 }
 
+
 type Color = string | number;
 type FontSize = string | number;
 
@@ -55,9 +56,17 @@ interface ComOptions extends ComBase {
     fontSize: FontSize
     textDecorator: TextDecorator | boolean
     color: Color
-    fillColor: Color
     r: integer | ComRadiusAttr
     texture: string | Phaser.Textures.Texture
+}
+
+interface ComRectangle extends ComBase {
+    fillColor: Color
+}
+
+interface ComTextBoard extends ComBase {
+    text: string
+    fillColor: Color
 }
 
 interface ComStruct {
