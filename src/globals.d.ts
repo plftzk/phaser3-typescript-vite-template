@@ -16,16 +16,33 @@ interface ComRadiusAttr extends ComBase {
 type Color = string | number;
 type FontSize = string | number;
 
-type Border = {
-    topWidth: number
-    topColor: Color
-    rightWidth: number
-    rightColor: Color
-    bottomWidth: number
-    bottomColor: Color
-    leftWidth: number
-    leftColor: Color
-} | number;
+type IndividualPadding = string;
+type ShorthandPadding = {
+    pt: integer
+    pr: integer
+    pb: integer
+    pl: integer
+}
+
+type IndividualMargin = string;
+type ShorthandMargin = {
+    mt: integer
+    mr: integer
+    mb: integer
+    ml: integer
+}
+
+type IndividualBorder = string;
+type ShorthandBorder = {
+    bt: integer
+    br: integer
+    bb: integer
+    bl: integer
+}
+
+type Padding = IndividualPadding | ShorthandPadding;
+type Margin = IndividualMargin | ShorthandMargin;
+type Border = IndividualBorder | ShorthandBorder;
 
 interface DashLineBase {
     dashLength?: integer
@@ -58,6 +75,12 @@ interface ComOptions extends ComBase {
     color: Color
     r: integer | ComRadiusAttr
     texture: string | Phaser.Textures.Texture
+}
+
+interface ComDiv extends ComBase {
+    padding?: Padding
+    margin?: Margin
+    border?: Border
 }
 
 interface ComRectangle extends ComBase {

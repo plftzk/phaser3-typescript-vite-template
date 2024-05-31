@@ -110,6 +110,10 @@ export default class JsonComBuilder {
         })
     }
 
+    div(option: ComDiv) {
+
+    }
+
     buildText(option: Partial<ComOptions>) {
         const o: ComOptions = this.fillComAttr(option);
         const text = new Phaser.GameObjects.Text(this.scene, o.x, o.y, o.text, {
