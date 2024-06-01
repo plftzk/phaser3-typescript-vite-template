@@ -38,6 +38,14 @@ type ShorthandBorder = {
     br: integer
     bb: integer
     bl: integer
+    btColor: Color
+    brColor: Color
+    bbColor: Color
+    blColor: Color
+    btType: string
+    brType: string
+    bbType: string
+    blType: string
 }
 
 type Padding = IndividualPadding | ShorthandPadding;

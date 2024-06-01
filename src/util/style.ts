@@ -33,3 +33,29 @@ export function unitizeSize(v: string | number, unit = 'px'): string {
     }
     return v;
 }
+
+function parseBorderString(s: string) {
+    const ptn = new RegExp(
+        '(\\d+)px( +(solid|dash))? +#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})',
+        'i'
+    );
+    const matches = s.match(ptn);
+    const b = <ShorthandBorder>{};
+    if (Array.isArray(matches) && matches.length === 8) {
+        b.bt = b.br = b.bb = b.bl = parseInt(matches[1]);
+        if (matches[3]) {
+            b.btType = b.brType = b.bbType = b.blType = matches[3];
+        }
+        if (matches[4]) {
+            b.btColor = b.btColor = b.btColor = b.btColor = '#' + matches[4];
+        }
+    }
+    return b;
+}
+
+export function border(v: Border) {
+    if (typeof v === 'string') {
+        parseBorderString(v);
+    }
+    return <ShorthandBorder>v;
+}

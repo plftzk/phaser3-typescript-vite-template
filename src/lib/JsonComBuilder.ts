@@ -111,7 +111,9 @@ export default class JsonComBuilder {
     }
 
     div(option: ComDiv) {
+        if (option.border) {
 
+        }
     }
 
     buildText(option: Partial<ComOptions>) {
