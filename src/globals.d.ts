@@ -46,6 +46,10 @@ type ShorthandBorder = {
     brType: string
     bbType: string
     blType: string
+    btAlpha: number
+    brAlpha: number
+    bbAlpha: number
+    blAlpha: number
 }
 
 type Padding = IndividualPadding | ShorthandPadding;
