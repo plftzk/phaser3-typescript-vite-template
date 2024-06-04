@@ -2,7 +2,7 @@ import Container = Phaser.GameObjects.Container;
 import Image = Phaser.GameObjects.Image;
 import Rectangle = Phaser.GameObjects.Rectangle;
 import Graphics = Phaser.GameObjects.Graphics;
-import {hex2Str, unitizeSize, toHexColor} from "/@/util/style";
+import {hex2Str, unitizeSize, toHexColor, border, margin} from "/@/util/style";
 
 export default class JsonComBuilder {
     private readonly scene: Phaser.Scene;
@@ -66,10 +66,10 @@ export default class JsonComBuilder {
     }
 
     buildDashLine(option: DashLine) {
-        const graphics = new Graphics(this.scene);
+        const graph = new Graphics(this.scene);
         const color = option.color || 0x000000;
         const lineWidth = option.lineWidth || 1;
-        graphics.lineStyle(lineWidth, toHexColor(color));
+        graph.lineStyle(lineWidth, toHexColor(color));
         const {x1, x2, y1, y2} = option;
         const dashLength = option.dashLength || 10;
         const gapLength = option.gapLength || 10;
@@ -80,14 +80,14 @@ export default class JsonComBuilder {
         const dashX = deltaX / dashCount;
         const dashY = deltaY / dashCount;
         for (let i = 0; i < dashCount; i++) {
-            const startX = x1 + i * dashX;
-            const startY = y1 + i * dashY;
-            const endX = startX + dashX * (dashLength / dashGapLength);
-            const endY = startY + dashY * (dashLength / dashGapLength);
-            graphics.lineBetween(startX, startY, endX, endY);
+            const fromX = x1 + i * dashX;
+            const fromY = y1 + i * dashY;
+            const toX = fromX + dashX * (dashLength / dashGapLength);
+            const toY = fromY + dashY * (dashLength / dashGapLength);
+            graph.lineBetween(fromX, fromY, toX, toY);
         }
-        this.container.add(graphics);
-        this.scene.add.existing(graphics);
+        this.container.add(graph);
+        this.scene.add.existing(graph);
     }
 
     buildHDashLine(option: HVDashLine) {
@@ -110,10 +110,99 @@ export default class JsonComBuilder {
         })
     }
 
-    div(option: ComDiv) {
-        if (option.border) {
-
+    buildSolidLine(option: SolidLine) {
+        const lineWidth = (option.lineWidth && option.lineWidth >= 0) ? option.lineWidth : 1;
+        if (lineWidth > 0) {
+            const graph = new Graphics(this.scene);
+            const color = option.color || 0x000000;
+            const alpha = option.alpha || 1;
+            graph.lineStyle(lineWidth, toHexColor(color));
+            if (alpha >= 0 && alpha !== 1) {
+                graph.setAlpha(alpha);
+            }
+            graph.lineBetween(option.x1, option.y1, option.x2, option.y2);
+            this.container.add(graph);
+            this.scene.add.existing(graph);
         }
+    }
+
+    buildHSolidLine(option: HVSolidLine) {
+        this.buildSolidLine({
+            x1: option.x,
+            x2: option.x + option.l,
+            y1: option.y,
+            y2: option.y,
+            ...option
+        })
+    }
+
+    buildVSolidLine(option: HVSolidLine) {
+        this.buildSolidLine({
+            x1: option.x,
+            x2: option.x,
+            y1: option.y,
+            y2: option.y + option.l,
+            ...option
+        })
+    }
+
+    div(option: ComDiv) {
+        const m: ShorthandMargin = margin(option.margin);
+        console.log(`[LOG]`, m);
+        if (option.border) {
+            const borderOption: ShorthandBorder = border(option.border);
+            const trX: number = option.x + m.ml;
+            const trY = option.y + m.mt;
+            const tlX = trX + option.w;
+            const tlY = trY;
+            const blX = tlX;
+            const blY = trY + option.h;
+            const brX = trX;
+            const brY = blY;
+            this.buildSolidLine({
+                x1: trX,
+                y1: trY,
+                x2: tlX,
+                y2: trY,
+                lineWidth: borderOption.bt,
+                color: borderOption.btColor,
+            });
+            this.buildSolidLine({
+                x1: tlX,
+                y1: tlY,
+                x2: blX,
+                y2: blY,
+                lineWidth: borderOption.br,
+                color: borderOption.btColor,
+            });
+            this.buildSolidLine({
+                x1: blX,
+                y1: blY,
+                x2: brX,
+                y2: brY,
+                lineWidth: borderOption.bb,
+                color: borderOption.btColor,
+            });
+            this.buildSolidLine({
+                x1: brX,
+                y1: brY,
+                x2: trX,
+                y2: trY,
+                lineWidth: borderOption.bl,
+                color: borderOption.btColor,
+            });
+        }
+
+
+        if (option.background) {
+            const background: ShorthandBackground = option.background;
+            if (background.img) {
+                const img = new Image(this.scene, 0, 0, background.img)
+                this.container.add(img);
+                this.scene.add.existing(img);
+            }
+        }
+
     }
 
     buildText(option: Partial<ComOptions>) {
@@ -128,8 +217,15 @@ export default class JsonComBuilder {
             const tb = text.getBounds();
             const tw = tb.width;
             const th = tb.height;
-
-            const bound = new Rectangle(this.scene, tw / 2, th / 2, tw, th, 0x666666, 0.5);
+            const bound = new Rectangle(
+                this.scene,
+                tw / 2,
+                th / 2,
+                tw,
+                th,
+                0x666666,
+                0.5
+            );
             bound.setStrokeStyle(1, 0x000000);
             comList.push(bound);
         }
@@ -223,7 +319,6 @@ export default class JsonComBuilder {
             paddingTop,
             paddingLeft
         } = textInfo;
-        console.log(`[LOG]`, boxWidth / 2);
         const roundRect = this.buildRectangle({
             x: boxWidth / 2,
             y: 0,

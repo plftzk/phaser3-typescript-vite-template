@@ -11,6 +11,7 @@ export default class ReaderScene extends Phaser.Scene {
     preload() {
         this.load.image('earth', 'assets/img/square-earth.png');
         this.load.image('btnBg', 'assets/img/button-bg.png');
+        this.load.image('zr', 'assets/img/zr.png');
     }
 
     update(time: number) {
@@ -39,6 +40,19 @@ export default class ReaderScene extends Phaser.Scene {
             y: 100,
             l: 100
         });
+
+        jb.div({
+            x: 300,
+            y: 300,
+            w: 200,
+            h: 100,
+            border: '1px solid #333',
+            margin: '5px 2px 3px 6px',
+            background: {
+                img: 'zr'
+            }
+        });
+
         // const chars = 'あ猫阿狗。い言不合。う霾天气。え而不伤。お心汤血。\n' +
         //     'か车司机。き死回生。く笑不得。け天辟地。こ人心弦。\n' +
         //     'さ逼兮兮。し装革履。す心裂肺。せ翁失马。そ肠刮肚。\n' +

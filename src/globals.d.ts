@@ -12,11 +12,9 @@ interface ComRadiusAttr extends ComBase {
     br: integer
 }
 
-
 type Color = string | number;
 type FontSize = string | number;
 
-type IndividualPadding = string;
 type ShorthandPadding = {
     pt: integer
     pr: integer
@@ -24,7 +22,6 @@ type ShorthandPadding = {
     pl: integer
 }
 
-type IndividualMargin = string;
 type ShorthandMargin = {
     mt: integer
     mr: integer
@@ -32,7 +29,6 @@ type ShorthandMargin = {
     ml: integer
 }
 
-type IndividualBorder = string;
 type ShorthandBorder = {
     bt: integer
     br: integer
@@ -52,9 +48,33 @@ type ShorthandBorder = {
     blAlpha: number
 }
 
-type Padding = IndividualPadding | ShorthandPadding;
-type Margin = IndividualMargin | ShorthandMargin;
-type Border = IndividualBorder | ShorthandBorder;
+type ShorthandBackground = {
+    img: string
+}
+
+type Padding = string | ShorthandPadding;
+type Margin = string | ShorthandMargin;
+type Border = string | ShorthandBorder;
+type Background = ShorthandBackground;
+
+interface LineBase {
+    color?: Color
+    lineWidth?: integer
+    alpha?: number
+}
+
+interface SolidLine extends LineBase {
+    x1: integer
+    x2: integer
+    y1: integer
+    y2: integer
+}
+
+interface HVSolidLine extends LineBase {
+    x: integer
+    y: integer
+    l: integer
+}
 
 interface DashLineBase {
     dashLength?: integer
@@ -93,6 +113,7 @@ interface ComDiv extends ComBase {
     padding?: Padding
     margin?: Margin
     border?: Border
+    background?: Background
 }
 
 interface ComRectangle extends ComBase {
