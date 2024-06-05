@@ -55,7 +55,7 @@ export default class ReaderScene extends Phaser.Scene {
             }
         });
 
-        this.add.nineslice(626, 485, 'cardBg', 0, 640, 360, 80, 80, 80, 80);
+        // this.add.nineslice(626, 485, 'cardBg', 0, 640, 360, 80, 80, 80, 80);
 
         // const chars = 'あ猫阿狗。い言不合。う霾天气。え而不伤。お心汤血。\n' +
         //     'か车司机。き死回生。く笑不得。け天辟地。こ人心弦。\n' +

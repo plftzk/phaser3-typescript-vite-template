@@ -3,6 +3,7 @@ import Image = Phaser.GameObjects.Image;
 import Rectangle = Phaser.GameObjects.Rectangle;
 import Graphics = Phaser.GameObjects.Graphics;
 import {hex2Str, unitizeSize, toHexColor, border, margin, background} from "/@/util/style";
+import NineSlice = Phaser.GameObjects.NineSlice;
 
 export default class JsonComBuilder {
     private readonly scene: Phaser.Scene;
@@ -211,6 +212,22 @@ export default class JsonComBuilder {
                 this.scene.add.existing(img);
             }
         }
+
+        const ns = new NineSlice(
+            this.scene,
+            rX + Math.floor(option.w / 2),
+            rY + Math.floor(option.h / 2),
+            'cardBg',
+            0,
+            option.w,
+            option.h,
+            80,
+            80,
+            80,
+            80
+        );
+        this.container.add(ns);
+        this.scene.add.existing(ns);
 
     }
 
