@@ -12,6 +12,7 @@ export default class ReaderScene extends Phaser.Scene {
         this.load.image('earth', 'assets/img/square-earth.png');
         this.load.image('btnBg', 'assets/img/button-bg.png');
         this.load.image('zr', 'assets/img/zr.png');
+        this.load.image('cardBg', 'assets/img/card-bg-deco-no-value.a46a9213.png');
     }
 
     update(time: number) {
@@ -53,6 +54,8 @@ export default class ReaderScene extends Phaser.Scene {
                 position: 'center'
             }
         });
+
+        this.add.nineslice(626, 485, 'cardBg', 0, 640, 360, 80, 80, 80, 80);
 
         // const chars = 'あ猫阿狗。い言不合。う霾天气。え而不伤。お心汤血。\n' +
         //     'か车司机。き死回生。く笑不得。け天辟地。こ人心弦。\n' +
