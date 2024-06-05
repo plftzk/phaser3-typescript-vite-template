@@ -50,6 +50,7 @@ type ShorthandBorder = {
 
 type ShorthandBackground = {
     img: string
+    position: string
 }
 
 type Padding = string | ShorthandPadding;
@@ -113,7 +114,7 @@ interface ComDiv extends ComBase {
     padding?: Padding
     margin?: Margin
     border?: Border
-    background?: Background
+    background?: Partial<Background>
 }
 
 interface ComRectangle extends ComBase {

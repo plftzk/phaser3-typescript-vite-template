@@ -133,3 +133,14 @@ export function margin(v: Margin | null | undefined) {
     }
     return <ShorthandMargin>v;
 }
+
+export function background(v: Partial<Background> | null | undefined) {
+    const dv: Background = {
+        img: '',
+        position: 'left'
+    };
+    if (v) {
+        Object.assign(dv, v);
+    }
+    return <ShorthandBackground>dv;
+}

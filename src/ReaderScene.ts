@@ -44,12 +44,13 @@ export default class ReaderScene extends Phaser.Scene {
         jb.div({
             x: 300,
             y: 300,
-            w: 200,
-            h: 100,
-            border: '1px solid #333',
+            w: 640,
+            h: 360,
+            border: '3px solid #333',
             margin: '5px 2px 3px 6px',
             background: {
-                img: 'zr'
+                img: 'zr',
+                position: 'center'
             }
         });
 

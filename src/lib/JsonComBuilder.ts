@@ -2,7 +2,7 @@ import Container = Phaser.GameObjects.Container;
 import Image = Phaser.GameObjects.Image;
 import Rectangle = Phaser.GameObjects.Rectangle;
 import Graphics = Phaser.GameObjects.Graphics;
-import {hex2Str, unitizeSize, toHexColor, border, margin} from "/@/util/style";
+import {hex2Str, unitizeSize, toHexColor, border, margin, background} from "/@/util/style";
 
 export default class JsonComBuilder {
     private readonly scene: Phaser.Scene;
@@ -148,17 +148,20 @@ export default class JsonComBuilder {
 
     div(option: ComDiv) {
         const m: ShorthandMargin = margin(option.margin);
-        console.log(`[LOG]`, m);
+        const trX = option.x + m.ml;
+        const trY = option.y + m.mt;
+        let rX = trX; // runtime x
+        let rY = trY; // runtime y
         if (option.border) {
             const borderOption: ShorthandBorder = border(option.border);
-            const trX: number = option.x + m.ml;
-            const trY = option.y + m.mt;
             const tlX = trX + option.w;
             const tlY = trY;
             const blX = tlX;
             const blY = trY + option.h;
             const brX = trX;
             const brY = blY;
+            rX += borderOption.bl;
+            rY += borderOption.bt;
             this.buildSolidLine({
                 x1: trX,
                 y1: trY,
@@ -193,11 +196,17 @@ export default class JsonComBuilder {
             });
         }
 
-
         if (option.background) {
-            const background: ShorthandBackground = option.background;
-            if (background.img) {
-                const img = new Image(this.scene, 0, 0, background.img)
+            const bg: ShorthandBackground = background(option.background);
+            if (bg.img) {
+                const img = new Image(this.scene, rX, rY, bg.img);
+                let bgX = Math.floor(rX + img.width / 2);
+                let bgY = Math.floor(rY + img.height / 2);
+                if (bg.position === 'center') {
+                    bgX = rX + Math.floor(option.w / 2);
+                    bgY = rY + Math.floor(option.h / 2);
+                }
+                img.setPosition(bgX, bgY);
                 this.container.add(img);
                 this.scene.add.existing(img);
             }
