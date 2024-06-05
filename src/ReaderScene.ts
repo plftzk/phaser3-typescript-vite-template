@@ -48,7 +48,7 @@ export default class ReaderScene extends Phaser.Scene {
             w: 640,
             h: 360,
             border: '3px solid #333',
-            margin: '5px 2px 3px 6px',
+            margin: '5px',
             background: {
                 img: 'zr',
                 position: 'center'
