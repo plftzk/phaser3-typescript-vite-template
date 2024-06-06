@@ -49,6 +49,7 @@ type ShorthandBorder = {
 }
 
 type ShorthandBackground = {
+    type: string,
     img: string
     position: string
 }

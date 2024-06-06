@@ -198,19 +198,24 @@ export default class JsonComBuilder {
         }
 
         if (option.background) {
-            const bg: ShorthandBackground = background(option.background);
-            if (bg.img) {
-                const img = new Image(this.scene, rX, rY, bg.img);
-                let bgX = Math.floor(rX + img.width / 2);
-                let bgY = Math.floor(rY + img.height / 2);
-                if (bg.position === 'center') {
-                    bgX = rX + Math.floor(option.w / 2);
-                    bgY = rY + Math.floor(option.h / 2);
-                }
-                img.setPosition(bgX, bgY);
-                this.container.add(img);
-                this.scene.add.existing(img);
+            const backgrounds: Background[] = [];
+            if (!Array.isArray(option.background)) {
+                backgrounds.push(background(option.background));
             }
+            backgrounds.map((bg) => {
+                if (bg.img) {
+                    const img = new Image(this.scene, rX, rY, bg.img);
+                    let bgX = Math.floor(rX + img.width / 2);
+                    let bgY = Math.floor(rY + img.height / 2);
+                    if (bg.position === 'center') {
+                        bgX = rX + Math.floor(option.w / 2);
+                        bgY = rY + Math.floor(option.h / 2);
+                    }
+                    img.setPosition(bgX, bgY);
+                    this.container.add(img);
+                    this.scene.add.existing(img);
+                }
+            });
         }
 
         const ns = new NineSlice(

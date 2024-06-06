@@ -134,8 +134,9 @@ export function margin(v: Margin | null | undefined) {
     return <ShorthandMargin>v;
 }
 
-export function background(v: Partial<Background> | Partial<Background>[] | null | undefined) {
+export function background(v: Partial<Background> | null | undefined) {
     const dv: Background = {
+        type: '',
         img: '',
         position: 'left'
     };
