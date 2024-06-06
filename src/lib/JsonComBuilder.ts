@@ -228,7 +228,6 @@ export default class JsonComBuilder {
         );
         this.container.add(ns);
         this.scene.add.existing(ns);
-
     }
 
     buildText(option: Partial<ComOptions>) {

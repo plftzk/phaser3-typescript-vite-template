@@ -114,7 +114,7 @@ interface ComDiv extends ComBase {
     padding?: Padding
     margin?: Margin
     border?: Border
-    background?: Partial<Background>
+    background?: Partial<Background>[] | Partial<Background>
 }
 
 interface ComRectangle extends ComBase {
